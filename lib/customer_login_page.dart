@@ -1,13 +1,14 @@
-// login_page.dart
+// customer_login_page.dart
 import 'package:flutter/material.dart';
-import 'home_page.dart'; // Import the home page
+import 'package:wool_threads/customer_home_page.dart';
+import 'farmer_home_page.dart'; // Import the Customer home page if different
 
-class LoginPage extends StatefulWidget {
+class CustomerLoginPage extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _CustomerLoginPageState createState() => _CustomerLoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _CustomerLoginPageState extends State<CustomerLoginPage> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
@@ -16,45 +17,39 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: Stack(
         children: [
-          // Background image
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/background2.jpeg'),
+                image: AssetImage('assets/background.jpg'), // Customer-specific background
                 fit: BoxFit.cover,
               ),
             ),
           ),
-          // Color overlay with opacity
           Container(
-            color: Colors.blue.withOpacity(0.75),
+            color: Colors.blue.withOpacity(0.7), // Customer-specific color overlay
           ),
-          // Main content
           Center(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30.0), // Horizontal padding for the whole content
+              padding: const EdgeInsets.symmetric(horizontal: 30.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  // Logo with custom spacing
                   ClipRRect(
                     borderRadius: BorderRadius.circular(20.0),
                     child: Image.asset(
-                      'assets/image.png',
+                      'assets/customer_logo.png', // Customer-specific logo
                       width: 300,
                       height: 200,
                       fit: BoxFit.cover,
                     ),
                   ),
-                  SizedBox(height: 50), // Space below the logo
-                  
-                  // Email field
+                  SizedBox(height: 50),
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10.0), // Padding above and below the email field
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: TextField(
                       controller: _emailController,
                       decoration: InputDecoration(
-                        labelText: 'Email',
+                        labelText: 'Customer Email',
                         fillColor: Colors.white.withOpacity(0.8),
                         filled: true,
                         border: OutlineInputBorder(
@@ -63,10 +58,8 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
-                  
-                  // Password field
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10.0), // Padding above and below the password field
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: TextField(
                       controller: _passwordController,
                       decoration: InputDecoration(
@@ -80,27 +73,28 @@ class _LoginPageState extends State<LoginPage> {
                       obscureText: true,
                     ),
                   ),
-                  
-                  // Login button with custom spacing
-                  SizedBox(height: 30), // Space above the button
+                  SizedBox(height: 30),
                   SizedBox(
-                    width: double.infinity,
+                    width: 200,
                     child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue, // Customer-specific button color
+                      ),
                       onPressed: () {
                         String email = _emailController.text;
                         String password = _passwordController.text;
-                        print('Email: $email');
+                        print('Customer Email: $email');
                         print('Password: $password');
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => HomePage()),
+                          MaterialPageRoute(builder: (context) => CustomerHomePage()), // Customer-specific home page
                         );
                       },
-                      child: Text(
-                        'Login',
+                      child: const Text(
+                        'Login as Customer',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFFFEFEFE),
+                          color: Colors.white,
                         ),
                       ),
                     ),
