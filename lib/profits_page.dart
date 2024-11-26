@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 
 class DailyProfitsPage extends StatelessWidget {
-  final List<double> dailyEarnings = [100, 120, 140, 130, 150, 160, 170];
-  final List<double> dailyExpenses = [80, 90, 100, 110, 120, 130, 140];
+  final List<double> dailyEarnings = [100, 120, 140, 130, 150, 100, 170];
+  final List<double> dailyExpenses = [80, 90, 150, 140, 160, 110, 180];
 
   @override
   Widget build(BuildContext context) {
@@ -13,9 +13,9 @@ class DailyProfitsPage extends StatelessWidget {
     );
 
     return Scaffold(
-      backgroundColor: Colors.green[50],
+      backgroundColor: Color.fromARGB(255, 182, 215, 254),
       appBar: AppBar(
-        backgroundColor: Colors.green,
+        backgroundColor: Color(0xFF0077B6),
         title: Text('Daily Profits & Loss'),
       ),
       body: Padding(
@@ -76,7 +76,7 @@ class DailyProfitsPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Colors.green[900],
+                color: Color(0xFF0077B6),
               ),
             ),
             SizedBox(height: 16),

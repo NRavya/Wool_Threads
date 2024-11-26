@@ -20,13 +20,13 @@ class _CustomerLoginPageState extends State<CustomerLoginPage> {
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/background.jpg'), // Customer-specific background
+                image: AssetImage('assets/background6.jpg'), // Customer-specific background
                 fit: BoxFit.cover,
               ),
             ),
           ),
           Container(
-            color: Colors.blue.withOpacity(0.7), // Customer-specific color overlay
+            color: Color(0xFFF7E7CE).withOpacity(0.4), // Customer-specific color overlay
           ),
           Center(
             child: Padding(
@@ -37,8 +37,10 @@ class _CustomerLoginPageState extends State<CustomerLoginPage> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(20.0),
                     child: Image.asset(
-                      'assets/customer_logo.png', // Customer-specific logo
-                      width: 300,
+                      'assets/yarn-ball-2.png',
+                      color: Color(0xFFC19A6B), // Change this to any color you want
+                      colorBlendMode: BlendMode.srcIn, // Farmer-specific logo
+                      width: 200,
                       height: 200,
                       fit: BoxFit.cover,
                     ),
@@ -78,7 +80,7 @@ class _CustomerLoginPageState extends State<CustomerLoginPage> {
                     width: 200,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue, // Customer-specific button color
+                        backgroundColor: Color(0xFFC19A6B), // Customer-specific button color
                       ),
                       onPressed: () {
                         String email = _emailController.text;

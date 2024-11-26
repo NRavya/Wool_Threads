@@ -14,8 +14,8 @@ class _TrackingPageState extends State<TrackingPage> {
   late GoogleMapController mapController;
   Set<Marker> _markers = Set();
   Set<Polyline> _polylines = Set();
-  final LatLng _farmLocation = LatLng(37.7749, -122.4194);
-  final LatLng _warehouseLocation = LatLng(37.8044, -122.2712);
+  final LatLng _farmLocation = LatLng(13.14920, 80.24596);
+  final LatLng _warehouseLocation = LatLng(12.96028, 80.05809);
   final String _googleApiKey = 'AIzaSyAsiuSgSw8Tz-NISovS4X4xu-8yKOh5rD0';
   final DateTime _estimatedDeliveryTime = DateTime.now().add(Duration(hours: 5));
   List<LatLng> _routePoints = [];
@@ -109,8 +109,8 @@ class _TrackingPageState extends State<TrackingPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tracking'),
-        backgroundColor: Color(0xFF6a994e),
+        title: Text('Tracking', style: TextStyle(color: Colors.white),),
+        backgroundColor: Color(0xFF0077B6),
       ),
       body: Stack(
         children: [
@@ -160,9 +160,9 @@ class _TrackingPageState extends State<TrackingPage> {
                   SizedBox(height: 8),
                   ElevatedButton(
                     onPressed: () {}, // Action for the button
-                    child: Text('Track Package'),
+                    child: Text('Track Package', style: TextStyle(color: Colors.white)),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF6a994e),
+                      backgroundColor: Color(0xFF0077B6),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),

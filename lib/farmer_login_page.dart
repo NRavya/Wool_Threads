@@ -1,4 +1,3 @@
-// farmer_login_page.dart
 import 'package:flutter/material.dart';
 import 'farmer_home_page.dart'; // Import the Farmer home page if different
 
@@ -19,13 +18,14 @@ class _FarmerLoginPageState extends State<FarmerLoginPage> {
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/background2.jpeg'), // Farmer-specific background
-                fit: BoxFit.cover,
+                image: AssetImage('assets/background5.jpg'), // Path to your background image
+                fit: BoxFit.cover, // Ensures the image covers the entire screen
+                colorFilter: ColorFilter.mode(
+                  Colors.blue.withOpacity(0.4), // Overlay color for better contrast
+                  BlendMode.darken,
+                ),
               ),
             ),
-          ),
-          Container(
-            color: Colors.green.withOpacity(0.7), // Farmer-specific color overlay
           ),
           Center(
             child: Padding(
@@ -37,7 +37,7 @@ class _FarmerLoginPageState extends State<FarmerLoginPage> {
                     borderRadius: BorderRadius.circular(20.0),
                     child: Image.asset(
                       'assets/black_sheep.png',
-                      color: Colors.yellow[100], // Change this to any color you want
+                      color: Color(0xFFa8c69f), // Change this to any color you want
                       colorBlendMode: BlendMode.srcIn, // Farmer-specific logo
                       width: 200,
                       height: 200,
@@ -51,7 +51,7 @@ class _FarmerLoginPageState extends State<FarmerLoginPage> {
                       controller: _emailController,
                       decoration: InputDecoration(
                         labelText: 'Farmer Email',
-                        fillColor: Colors.white.withOpacity(0.8),
+                        fillColor: Colors.white.withOpacity(0.9),
                         filled: true,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
@@ -65,7 +65,7 @@ class _FarmerLoginPageState extends State<FarmerLoginPage> {
                       controller: _passwordController,
                       decoration: InputDecoration(
                         labelText: 'Password',
-                        fillColor: Colors.white.withOpacity(0.8),
+                        fillColor: Colors.white.withOpacity(0.9),
                         filled: true,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
@@ -79,7 +79,7 @@ class _FarmerLoginPageState extends State<FarmerLoginPage> {
                     width: 200,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green, // Farmer-specific button color
+                        backgroundColor: Colors.blue.withOpacity(0.9), // Farmer-specific button color
                       ),
                       onPressed: () {
                         String email = _emailController.text;

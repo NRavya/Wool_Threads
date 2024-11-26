@@ -77,6 +77,22 @@ flutter:
   - assets/sheep.png
   - assets/knitting.png
   - assets/black_sheep.png
+  - assets/traveling.png
+  - assets/cash-flow.png
+  - assets/money.png
+  - assets/money-2.png
+  - assets/knitting-2.png
+  - assets/yarn-ball.png
+  - assets/business-and-finance.png
+  - assets/money-3.png
+  - assets/diagram.png
+  - assets/background6.jpg
+  - assets/close-up-wool-texture-design.jpg
+  - assets/background3.jpg
+  - assets/background4.jpg
+  - assets/background5.jpg
+  - assets/yarn-ball-2.png
+  - assets/blanket.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
