@@ -1,7 +1,7 @@
 // splash_screen.dart
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'login_page.dart'; // Import the login page
+import 'login_choice_page.dart'; // Import the new login choice page
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -15,22 +15,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
-        PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) => LoginPage(),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            const begin = Offset(1.0, 0.0);
-            const end = Offset.zero;
-            const curve = Curves.easeInOut;
-
-            var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-
-            return SlideTransition(
-              position: animation.drive(tween),
-              child: child,
-            );
-          },
-          transitionDuration: Duration(milliseconds: 500),
-        ),
+        MaterialPageRoute(builder: (context) => LoginChoicePage()),
       );
     });
   }
@@ -40,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
-        child: Image.asset('assets/image.png'), // Replace with your logo
+        child: Image.asset('assets/image.png'), // Replace with your logo image
       ),
     );
   }
