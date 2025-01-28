@@ -19,7 +19,7 @@ class FarmerHomePage extends StatelessWidget {
         ),
         backgroundColor: Color(0xFF0077B6),
         centerTitle: false,
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading: true,
         actions: [
           IconButton(
             icon: Icon(Icons.notifications, color: Colors.white),
@@ -31,6 +31,9 @@ class FarmerHomePage extends StatelessWidget {
             },
           ),
         ],
+      ),
+      drawer: Drawer(
+        backgroundColor: Color.fromARGB(255, 182, 215, 254),
       ),
       body: Stack(
         children: [

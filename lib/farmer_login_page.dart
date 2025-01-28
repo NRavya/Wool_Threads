@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'farmer_home_page.dart'; // Import the Farmer home page if different
+import 'package:wool_threads/integration/api_service.dart'; // Import your ApiService
 
 class FarmerLoginPage extends StatefulWidget {
   @override
@@ -9,6 +10,7 @@ class FarmerLoginPage extends StatefulWidget {
 class _FarmerLoginPageState extends State<FarmerLoginPage> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+  final ApiService apiService = ApiService(); // Instantiate ApiService
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +21,9 @@ class _FarmerLoginPageState extends State<FarmerLoginPage> {
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: AssetImage('assets/background5.jpg'), // Path to your background image
-                fit: BoxFit.cover, // Ensures the image covers the entire screen
+                fit: BoxFit.cover,
                 colorFilter: ColorFilter.mode(
-                  Colors.blue.withOpacity(0.4), // Overlay color for better contrast
+                  Colors.blue.withOpacity(0.4),
                   BlendMode.darken,
                 ),
               ),
@@ -37,8 +39,8 @@ class _FarmerLoginPageState extends State<FarmerLoginPage> {
                     borderRadius: BorderRadius.circular(20.0),
                     child: Image.asset(
                       'assets/black_sheep.png',
-                      color: Color(0xFFa8c69f), // Change this to any color you want
-                      colorBlendMode: BlendMode.srcIn, // Farmer-specific logo
+                      color: Color(0xFFa8c69f),
+                      colorBlendMode: BlendMode.srcIn,
                       width: 200,
                       height: 200,
                       fit: BoxFit.cover,
@@ -79,17 +81,29 @@ class _FarmerLoginPageState extends State<FarmerLoginPage> {
                     width: 200,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue.withOpacity(0.9), // Farmer-specific button color
+                        backgroundColor:
+                            Colors.blue.withOpacity(0.9), // Farmer-specific button color
                       ),
-                      onPressed: () {
+                      onPressed: () async {
                         String email = _emailController.text;
                         String password = _passwordController.text;
-                        print('Farmer Email / Phone Number: $email');
-                        print('Password: $password');
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => FarmerHomePage()), // Farmer-specific home page
-                        );
+
+                        // Call the login function from ApiService
+                        Map<String, dynamic> response = await apiService.login(email, password);
+                        String? token = response['token'];
+
+                        if (token != null) {
+                          // Login successful, navigate to FarmerHomePage
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => FarmerHomePage()),
+                          );
+                        } else {
+                          // Login failed, show an error message
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Login Failed')),
+                          );
+                        }
                       },
                       child: const Text(
                         'Login as Farmer',
