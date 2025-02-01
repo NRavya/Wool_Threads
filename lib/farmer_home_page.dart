@@ -1,28 +1,71 @@
-import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:wool_threads/stats_page.dart';
+import 'package:flutter/material.dart';
+import 'package:wool_threads/integration/api_service.dart'; // Import your ApiService class
 import 'tracking_page.dart';
 import 'profits_page.dart';
 import 'notifications_page.dart';
+import 'dart:async'; // For async operations
 
-class FarmerHomePage extends StatelessWidget {
+class FarmerHomePage extends StatefulWidget {
+  const FarmerHomePage({super.key});
+
+  @override
+  _FarmerHomePageState createState() => _FarmerHomePageState();
+}
+
+class _FarmerHomePageState extends State<FarmerHomePage> {
+  late ApiService apiService;
+  Map<String, dynamic> dailyProfits = {};
+  List<Map<String, dynamic>> shipments = [];
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    apiService = ApiService(
+        _baseUrl: 'http://localhost:5000/api'); // Use your actual API URL
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    try {
+      String token =
+          'your-jwt-token'; // Replace with the actual token from AuthService or wherever it's stored
+      // Fetch daily profits and shipments
+      var profits = await apiService.fetchDailyProfits(token);
+      var shipmentData = await apiService.fetchShipments(token);
+
+      setState(() {
+        dailyProfits = profits;
+        shipments = shipmentData;
+        isLoading = false; // Stop loading after data is fetched
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      // Handle error
+      print('Error fetching data: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Wool Threads',
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Color(0xFF0077B6),
+        backgroundColor: const Color(0xFF0077B6),
         centerTitle: false,
         automaticallyImplyLeading: true,
         actions: [
           IconButton(
-            icon: Icon(Icons.notifications, color: Colors.white),
+            icon: const Icon(Icons.notifications, color: Colors.white),
             onPressed: () {
               Navigator.push(
                 context,
@@ -32,338 +75,258 @@ class FarmerHomePage extends StatelessWidget {
           ),
         ],
       ),
-      drawer: Drawer(
-        backgroundColor: Color.fromARGB(255, 182, 215, 254),
-      ),
-      body: Stack(
-        children: [
-          // Main Content
-          Container(
-            color: Color.fromARGB(255, 182, 215, 254), // Full background color
-            child: Column(
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : Stack(
               children: [
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Padding(
-                      padding: EdgeInsets.all(10), // Padding for content
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Graph Section
-                          Text(
-                            'Daily Profits',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          Container(
-                            height: 300, // Adjust height of the graph
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(15),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black12,
-                                  blurRadius: 5,
-                                  offset: Offset(0, 3),
-                                ),
-                              ],
-                            ),
-                            padding: EdgeInsets.all(16),
-                            child: LineChart(
-                              LineChartData(
-                                gridData: FlGridData(show: true),
-                                titlesData: FlTitlesData(
-                                  leftTitles: AxisTitles(
-                                    sideTitles: SideTitles(
-                                      showTitles: true,
-                                      reservedSize: 40,
-                                      interval: 50,
-                                      getTitlesWidget: (value, meta) {
-                                        return Text(
-                                          value.toInt().toString(),
-                                          style: TextStyle(
-                                            color: Color(0xFF0077B6),
-                                            fontSize: 12,
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                  bottomTitles: AxisTitles(
-                                    sideTitles: SideTitles(
-                                      showTitles: true,
-                                      reservedSize: 30,
-                                      getTitlesWidget: (value, meta) {
-                                        return Text(
-                                          'Day ${value.toInt()}',
-                                          style: TextStyle(
-                                            color: Color(0xFF0077B6),
-                                            fontSize: 12,
-                                          ),
-                                        );
-                                      },
-                                    ),
+                Container(
+                  color: const Color.fromARGB(255, 182, 215, 254),
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Daily Profits Section
+                                const Text(
+                                  'Daily Profits',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                borderData: FlBorderData(show: true),
-                                lineBarsData: [
-                                  LineChartBarData(
-                                    isCurved: true,
-                                    spots: [
-                                      FlSpot(0, 100),
-                                      FlSpot(1, 120),
-                                      FlSpot(2, 140),
-                                      FlSpot(3, 80),
-                                      FlSpot(4, 200),
-                                      FlSpot(5, 180),
-                                      FlSpot(6, 250),
+                                const SizedBox(height: 10),
+                                Container(
+                                  height: 300,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(15),
+                                    boxShadow: const [
+                                      BoxShadow(
+                                        color: Colors.black12,
+                                        blurRadius: 5,
+                                        offset: Offset(0, 3),
+                                      ),
                                     ],
-                                    color: Color(0xFF0077B6),
-                                    barWidth: 4,
-                                    isStrokeCapRound: true,
                                   ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 20),
-                          // Profit Summary Section
-                          Text(
-                            'Today\'s Profit',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(15),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black12,
-                                  blurRadius: 5,
-                                  offset: Offset(0, 3),
-                                ),
-                              ],
-                            ),
-                            padding: EdgeInsets.all(16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Total Wool Sold:',
-                                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
-                                      '50 kg',
-                                      style: TextStyle(fontSize: 16),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 8),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Price per kg:',
-                                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
-                                      '\$50',
-                                      style: TextStyle(fontSize: 16),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 8),
-                                Divider(color: Colors.black26),
-                                SizedBox(height: 8),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Total Profit:',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xFF0077B6),
+                                  padding: const EdgeInsets.all(16),
+                                  child: LineChart(
+                                    LineChartData(
+                                      gridData: FlGridData(show: true),
+                                      titlesData: FlTitlesData(
+                                        leftTitles: AxisTitles(
+                                          sideTitles: SideTitles(
+                                            showTitles: true,
+                                            reservedSize: 40,
+                                            interval: 50,
+                                          ),
+                                        ),
+                                        bottomTitles: AxisTitles(
+                                          sideTitles: SideTitles(
+                                            showTitles: true,
+                                            reservedSize: 30,
+                                          ),
+                                        ),
                                       ),
+                                      borderData: FlBorderData(show: true),
+                                      lineBarsData: [
+                                        LineChartBarData(
+                                          isCurved: true,
+                                          spots: (dailyProfits['data'] as List)
+                                              .map((e) => FlSpot(
+                                                  e['day'].toDouble(),
+                                                  e['profit'].toDouble()))
+                                              .toList(),
+                                          color: const Color(0xFF0077B6),
+                                          barWidth: 4,
+                                          isStrokeCapRound: true,
+                                        ),
+                                      ],
                                     ),
-                                    Text(
-                                      '\$2500',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xFF0077B6),
+                                  ),
+                                ),
+                                const SizedBox(height: 20),
+                                // Profit Summary Section
+                                const Text(
+                                  'Today\'s Profit',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(15),
+                                    boxShadow: const [
+                                      BoxShadow(
+                                        color: Colors.black12,
+                                        blurRadius: 5,
+                                        offset: Offset(0, 3),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
+                                  padding: const EdgeInsets.all(16),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const Text(
+                                            'Total Wool Sold:',
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(
+                                            '${dailyProfits['total_wool_sold']} kg',
+                                            style:
+                                                const TextStyle(fontSize: 16),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const Text(
+                                            'Price per kg:',
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(
+                                            '\$${dailyProfits['price_per_kg']}',
+                                            style:
+                                                const TextStyle(fontSize: 16),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 8),
+                                      const Divider(color: Colors.black26),
+                                      const SizedBox(height: 8),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const Text(
+                                            'Total Profit:',
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                              color: Color(0xFF0077B6),
+                                            ),
+                                          ),
+                                          Text(
+                                            '\$${dailyProfits['total_profit']}',
+                                            style: const TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                              color: Color(0xFF0077B6),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
+                                const SizedBox(height: 20),
+                                // Shipment Status Section
+                                const Text(
+                                  'Shipment Tracking Status',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                Column(
+                                  children: shipments
+                                      .map((shipment) => ShipmentCard(
+                                            id: shipment['id'],
+                                            destination:
+                                                shipment['destination'],
+                                            status: shipment['status'],
+                                            eta: shipment['eta'],
+                                          ))
+                                      .toList(),
+                                ),
+                                const SizedBox(height: 20),
                               ],
                             ),
                           ),
-                          SizedBox(height: 20),
-                          // Tracking Status Section
-                          Text(
-                            'Shipment Tracking Status',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(15),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black12,
-                                  blurRadius: 5,
-                                  offset: Offset(0, 3),
-                                ),
-                              ],
-                            ),
-                            padding: EdgeInsets.all(16),
-                            child: Column(
-                              children: [
-                                ShipmentCard(
-                                  id: '#001',
-                                  destination: 'City A',
-                                  status: 'In Transit',
-                                  eta: '2 Days',
-                                ),
-                                ShipmentCard(
-                                  id: '#002',
-                                  destination: 'City B',
-                                  status: 'Delivered',
-                                  eta: 'Completed',
-                                ),
-                                ShipmentCard(
-                                  id: '#003',
-                                  destination: 'City C',
-                                  status: 'Pending Pickup',
-                                  eta: '5 Days',
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 20),
-                          // Wool Standards Section
-                          Text(
-                            'Wool Standards',
-                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(height: 10),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(15),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black12,
-                                  blurRadius: 5,
-                                  offset: Offset(0, 3),
-                                ),
-                              ],
-                            ),
-                            padding: EdgeInsets.all(16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '1. Micron Count: 20-22 microns.',
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                                SizedBox(height: 8),
-                                Text(
-                                  '2. Staple Length: 3-4 inches.',
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                                SizedBox(height: 8),
-                                Text(
-                                  '3. Clean Wool Yield: Above 70%.',
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                                SizedBox(height: 8),
-                                Text(
-                                  '4. Fiber Strength: High tensile strength.',
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
+                    ],
+                  ),
+                ),
+                // Chatbot Button
+                Positioned(
+                  bottom: 25,
+                  right: 16,
+                  child: FloatingActionButton(
+                    backgroundColor: const Color(0xFF0077B6),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ChatBotPage()),
+                      );
+                    },
+                    child: const Icon(Icons.chat, color: Colors.white),
                   ),
                 ),
               ],
             ),
-          ),
-          // Chatbot Button
-          Positioned(
-            bottom: 25,
-            right: 16,
-            child: FloatingActionButton(
-              backgroundColor: Color(0xFF0077B6),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ChatBotPage()),
-                );
-              },
-              child: Icon(Icons.chat, color: Colors.white),
-            ),
-          ),
-        ],
-      ),
       bottomNavigationBar: BottomAppBar(
-        color: Color(0xFF0077B6),
+        color: const Color(0xFF0077B6),
         child: SizedBox(
-          height: 70, // Adjust the height of the BottomAppBar
+          height: 70,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               IconButton(
-                icon: ImageIcon(
+                icon: const ImageIcon(
                   AssetImage("assets/traveling.png"),
                   color: Color.fromARGB(255, 182, 215, 254),
                   size: 35,
                 ),
                 onPressed: () {
-                  Navigator.push(context,
+                  Navigator.push(
+                    context,
                     MaterialPageRoute(builder: (context) => TrackingPage()),
-                  );// Navigate to the tracking page
+                  );
                 },
               ),
               IconButton(
-                icon: ImageIcon(
+                icon: const ImageIcon(
                   AssetImage("assets/money-3.png"),
                   color: Color.fromARGB(255, 182, 215, 254),
                   size: 50,
                 ),
                 onPressed: () {
-                  Navigator.push(context,
+                  Navigator.push(
+                    context,
                     MaterialPageRoute(builder: (context) => DailyProfitsPage()),
                   );
                 },
               ),
               IconButton(
-                icon: ImageIcon(
+                icon: const ImageIcon(
                   AssetImage("assets/diagram.png"),
                   color: Color.fromARGB(255, 182, 215, 254),
                   size: 35,
                 ),
                 onPressed: () {
-                  Navigator.push(context,
+                  Navigator.push(
+                    context,
                     MaterialPageRoute(builder: (context) => MarketStatsPage()),
                   );
                 },
@@ -382,7 +345,8 @@ class ShipmentCard extends StatelessWidget {
   final String status;
   final String eta;
 
-  ShipmentCard({
+  const ShipmentCard({
+    super.key,
     required this.id,
     required this.destination,
     required this.status,
@@ -392,11 +356,11 @@ class ShipmentCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.symmetric(vertical: 8),
+      margin: const EdgeInsets.symmetric(vertical: 8),
       child: ListTile(
         title: Text(
           'Shipment ID: $id',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -407,25 +371,9 @@ class ShipmentCard extends StatelessWidget {
           ],
         ),
         trailing: Icon(
-          status == 'Delivered'
-              ? Icons.check_circle
-              : Icons.local_shipping,
+          status == 'Delivered' ? Icons.check_circle : Icons.local_shipping,
           color: status == 'Delivered' ? Colors.green : Colors.blue,
         ),
-      ),
-    );
-  }
-}
-
-class ChatBotPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Chatbot'),
-      ),
-      body: Center(
-        child: Text('Chatbot Interface Coming Soon!'),
       ),
     );
   }

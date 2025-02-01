@@ -6,18 +6,21 @@ import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 
 class TrackingPage extends StatefulWidget {
+  const TrackingPage({super.key});
+
   @override
   _TrackingPageState createState() => _TrackingPageState();
 }
 
 class _TrackingPageState extends State<TrackingPage> {
   late GoogleMapController mapController;
-  Set<Marker> _markers = Set();
-  Set<Polyline> _polylines = Set();
-  final LatLng _farmLocation = LatLng(13.14920, 80.24596);
-  final LatLng _warehouseLocation = LatLng(12.96028, 80.05809);
+  final Set<Marker> _markers = {};
+  final Set<Polyline> _polylines = {};
+  final LatLng _farmLocation = const LatLng(13.14920, 80.24596);
+  final LatLng _warehouseLocation = const LatLng(12.96028, 80.05809);
   final String _googleApiKey = 'AIzaSyAsiuSgSw8Tz-NISovS4X4xu-8yKOh5rD0';
-  final DateTime _estimatedDeliveryTime = DateTime.now().add(Duration(hours: 5));
+  final DateTime _estimatedDeliveryTime =
+      DateTime.now().add(const Duration(hours: 5));
   List<LatLng> _routePoints = [];
   late Marker _packageMarker;
   int _currentStep = 0;
@@ -27,16 +30,17 @@ class _TrackingPageState extends State<TrackingPage> {
     setState(() {
       _markers.addAll([
         Marker(
-          markerId: MarkerId('farmLocation'),
+          markerId: const MarkerId('farmLocation'),
           position: _farmLocation,
-          infoWindow: InfoWindow(title: 'Farm Location'),
+          infoWindow: const InfoWindow(title: 'Farm Location'),
           icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
         ),
         Marker(
-          markerId: MarkerId('warehouseLocation'),
+          markerId: const MarkerId('warehouseLocation'),
           position: _warehouseLocation,
-          infoWindow: InfoWindow(title: 'Warehouse Location'),
-          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+          infoWindow: const InfoWindow(title: 'Warehouse Location'),
+          icon:
+              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
         ),
       ]);
     });
@@ -51,20 +55,22 @@ class _TrackingPageState extends State<TrackingPage> {
       final data = jsonDecode(response.body);
       final routes = data['routes'] as List;
       if (routes.isNotEmpty) {
-        final polylinePoints = _convertToLatLng(routes[0]['legs'][0]['steps'] as List);
+        final polylinePoints =
+            _convertToLatLng(routes[0]['legs'][0]['steps'] as List);
         setState(() {
           _routePoints = polylinePoints;
           _polylines.add(Polyline(
-            polylineId: PolylineId('route'),
+            polylineId: const PolylineId('route'),
             points: polylinePoints,
             color: Colors.blue,
             width: 5,
           ));
           _packageMarker = Marker(
-            markerId: MarkerId('packageLocation'),
+            markerId: const MarkerId('packageLocation'),
             position: _routePoints[0],
-            infoWindow: InfoWindow(title: 'Package Location'),
-            icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+            infoWindow: const InfoWindow(title: 'Package Location'),
+            icon:
+                BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
           );
           _markers.add(_packageMarker);
         });
@@ -77,7 +83,8 @@ class _TrackingPageState extends State<TrackingPage> {
 
   List<LatLng> _convertToLatLng(List steps) {
     return steps
-        .map((step) => LatLng(step['end_location']['lat'], step['end_location']['lng']))
+        .map((step) =>
+            LatLng(step['end_location']['lat'], step['end_location']['lng']))
         .toList();
   }
 
@@ -88,14 +95,16 @@ class _TrackingPageState extends State<TrackingPage> {
         setState(() {
           _currentStep++;
           _packageMarker = Marker(
-            markerId: MarkerId('packageLocation'),
+            markerId: const MarkerId('packageLocation'),
             position: _routePoints[_currentStep],
-            infoWindow: InfoWindow(title: 'Package Location'),
-            icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+            infoWindow: const InfoWindow(title: 'Package Location'),
+            icon:
+                BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
           );
           _markers.add(_packageMarker);
         });
-        mapController.moveCamera(CameraUpdate.newLatLng(_routePoints[_currentStep]));
+        mapController
+            .moveCamera(CameraUpdate.newLatLng(_routePoints[_currentStep]));
       } else {
         timer.cancel();
         print("Package has reached the destination!");
@@ -105,19 +114,24 @@ class _TrackingPageState extends State<TrackingPage> {
 
   @override
   Widget build(BuildContext context) {
-    String formattedDate = DateFormat('yyyy-MM-dd HH:mm').format(_estimatedDeliveryTime);
+    String formattedDate =
+        DateFormat('yyyy-MM-dd HH:mm').format(_estimatedDeliveryTime);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tracking', style: TextStyle(color: Colors.white),),
-        backgroundColor: Color(0xFF0077B6),
+        title: const Text(
+          'Tracking',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: const Color(0xFF0077B6),
       ),
       body: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.all(15.0),  // Padding around the map edges
+            padding: const EdgeInsets.all(15.0), // Padding around the map edges
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(20.0),  // Rounded border radius for the map
+              borderRadius: BorderRadius.circular(
+                  20.0), // Rounded border radius for the map
               child: GoogleMap(
                 onMapCreated: _onMapCreated,
                 initialCameraPosition: CameraPosition(
@@ -132,8 +146,8 @@ class _TrackingPageState extends State<TrackingPage> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              margin: EdgeInsets.all(16.0),
-              padding: EdgeInsets.all(12.0),
+              margin: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(12.0),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(8.0),
@@ -141,32 +155,33 @@ class _TrackingPageState extends State<TrackingPage> {
                   BoxShadow(
                     color: Colors.black.withOpacity(0.2),
                     blurRadius: 6,
-                    offset: Offset(0, 2),
+                    offset: const Offset(0, 2),
                   ),
                 ],
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
+                  const Text(
                     'Estimated Delivery Time:',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   Text(
                     formattedDate,
                     style: TextStyle(fontSize: 16, color: Colors.grey[700]),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   ElevatedButton(
-                    onPressed: () {}, // Action for the button
-                    child: Text('Track Package', style: TextStyle(color: Colors.white)),
+                    onPressed: () {},
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF0077B6),
+                      backgroundColor: const Color(0xFF0077B6),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
-                    ),
+                    ), // Action for the button
+                    child: Text('Track Package',
+                        style: TextStyle(color: Colors.white)),
                   ),
                 ],
               ),

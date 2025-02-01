@@ -3,8 +3,9 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class ApiService {
-  static const String baseUrl = "http://localhost:5000/api"; // Replace with your backend URL
-  final storage = FlutterSecureStorage();
+  static const String baseUrl =
+      "http://localhost:5000/api"; // Replace with your backend URL
+  final storage = const FlutterSecureStorage();
 
   // Login Function
   Future<String?> login(String email, String password) async {

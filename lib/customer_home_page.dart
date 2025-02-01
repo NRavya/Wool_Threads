@@ -3,6 +3,8 @@ import 'tracking_page.dart';
 import 'customer_cart_page.dart'; // Import the Cart Page
 
 class CustomerHomePage extends StatefulWidget {
+  const CustomerHomePage({super.key});
+
   @override
   _CustomerHomePageState createState() => _CustomerHomePageState();
 }
@@ -25,11 +27,14 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
 
   void addToCart(Map<String, dynamic> product) {
     setState(() {
-      final index = cartItems.indexWhere((item) => item['name'] == product['name']);
+      final index =
+          cartItems.indexWhere((item) => item['name'] == product['name']);
       if (index != -1) {
-        cartItems[index]['quantity'] += 1; // Increment quantity if the product is already in the cart
+        cartItems[index]['quantity'] +=
+            1; // Increment quantity if the product is already in the cart
       } else {
-        cartItems.add({...product, 'quantity': 1}); // Add product to cart with quantity
+        cartItems.add(
+            {...product, 'quantity': 1}); // Add product to cart with quantity
       }
     });
   }
@@ -38,24 +43,25 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Wool Threads - Customer',
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Color.fromARGB(255, 161, 129, 89),
+        backgroundColor: const Color.fromARGB(255, 161, 129, 89),
         automaticallyImplyLeading: false, // This removes the back button
         actions: [
           Stack(
             children: [
               IconButton(
-                icon: Icon(Icons.shopping_cart, color: Colors.white),
+                icon: const Icon(Icons.shopping_cart, color: Colors.white),
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => CartPage(cartItems: cartItems)),
+                    MaterialPageRoute(
+                        builder: (context) => CartPage(cartItems: cartItems)),
                   );
                 },
               ),
@@ -64,14 +70,17 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                   right: 8,
                   top: 8,
                   child: Container(
-                    padding: EdgeInsets.all(4),
-                    decoration: BoxDecoration(
+                    padding: const EdgeInsets.all(4),
+                    decoration: const BoxDecoration(
                       color: Colors.red,
                       shape: BoxShape.circle,
                     ),
                     child: Text(
                       '${cartItems.length}',
-                      style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
@@ -80,16 +89,16 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
         ],
       ),
       body: Container(
-        color: Color(0xFFF7E7CE),
-        padding: EdgeInsets.all(10),
+        color: const Color(0xFFF7E7CE),
+        padding: const EdgeInsets.all(10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               'New Arrivals',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             SizedBox(
               height: 250,
               child: ListView.builder(
@@ -105,29 +114,29 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                         borderRadius: BorderRadius.circular(15),
                       ),
                       child: Padding(
-                        padding: EdgeInsets.all(16.0),
+                        padding: const EdgeInsets.all(16.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               product['name'],
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(height: 10),
+                            const SizedBox(height: 10),
                             Text(
                               product['description'],
-                              style: TextStyle(fontSize: 14),
+                              style: const TextStyle(fontSize: 14),
                             ),
-                            Spacer(),
+                            const Spacer(),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  '\₹${product['price']}.00',
-                                  style: TextStyle(
+                                  '₹${product['price']}.00',
+                                  style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
                                     color: Color.fromARGB(255, 161, 129, 89),
@@ -138,9 +147,10 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                                     addToCart(product);
                                   },
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: Color.fromARGB(255, 161, 129, 89),
+                                    backgroundColor:
+                                        const Color.fromARGB(255, 161, 129, 89),
                                   ),
-                                  child: Text(
+                                  child: const Text(
                                     'Add',
                                     style: TextStyle(color: Colors.white),
                                   ),
@@ -164,18 +174,20 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
 
   Widget _buildBottomNavBar(BuildContext context) {
     return BottomAppBar(
-      color: Color.fromARGB(255, 161, 129, 89),
+      color: const Color.fromARGB(255, 161, 129, 89),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           IconButton(
-            icon: Icon(Icons.home, size: 35.0, color: Color(0xFFF7E7CE)),
+            icon: const Icon(Icons.home, size: 35.0, color: Color(0xFFF7E7CE)),
             onPressed: () {},
           ),
           IconButton(
-            icon: Icon(Icons.track_changes_outlined, size: 35.0, color: Color(0xFFF7E7CE)),
+            icon: const Icon(Icons.track_changes_outlined,
+                size: 35.0, color: Color(0xFFF7E7CE)),
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => TrackingPage()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => TrackingPage()));
             },
           ),
         ],
