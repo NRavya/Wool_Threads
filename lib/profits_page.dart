@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 
 class DailyProfitsPage extends StatelessWidget {
-  final List<double> dailyEarnings = [100, 120, 140, 130, 150, 160, 170];
-  final List<double> dailyExpenses = [80, 90, 100, 110, 120, 130, 140];
+  final List<double> dailyEarnings = const [100, 120, 140, 130, 150, 100, 170];
+  final List<double> dailyExpenses = const [80, 90, 150, 140, 160, 110, 180];
+
+  const DailyProfitsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,20 +15,20 @@ class DailyProfitsPage extends StatelessWidget {
     );
 
     return Scaffold(
-      backgroundColor: Colors.green[50],
+      backgroundColor: const Color.fromARGB(255, 182, 215, 254),
       appBar: AppBar(
-        backgroundColor: Colors.green,
-        title: Text('Daily Profits & Loss'),
+        backgroundColor: const Color(0xFF0077B6),
+        title: const Text('Daily Profits & Loss'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Text(
+            const Text(
               'Daily Earnings and Expenses',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Expanded(
               flex: 1,
               child: ListView.builder(
@@ -38,19 +40,23 @@ class DailyProfitsPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: ListTile(
-                      contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
                       leading: CircleAvatar(
                         backgroundColor: dailyProfits[index] >= 0
                             ? Colors.greenAccent
                             : Colors.redAccent,
                         child: Icon(
-                          dailyProfits[index] >= 0 ? Icons.arrow_upward : Icons.arrow_downward,
+                          dailyProfits[index] >= 0
+                              ? Icons.arrow_upward
+                              : Icons.arrow_downward,
                           color: Colors.white,
                         ),
                       ),
                       title: Text(
                         'Day ${index + 1}',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       subtitle: Text(
                         'Earnings: \$${dailyEarnings[index].toStringAsFixed(2)}\n'
@@ -61,7 +67,9 @@ class DailyProfitsPage extends StatelessWidget {
                             ? 'Profit: \$${dailyProfits[index].toStringAsFixed(2)}'
                             : 'Loss: \$${dailyProfits[index].abs().toStringAsFixed(2)}',
                         style: TextStyle(
-                          color: dailyProfits[index] >= 0 ? Colors.green : Colors.red,
+                          color: dailyProfits[index] >= 0
+                              ? Colors.green
+                              : Colors.red,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -70,16 +78,16 @@ class DailyProfitsPage extends StatelessWidget {
                 },
               ),
             ),
-            SizedBox(height: 16),
-            Text(
+            const SizedBox(height: 16),
+            const Text(
               'Profit/Loss Trend',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Colors.green[900],
+                color: Color(0xFF0077B6),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Expanded(
               flex: 2,
               child: Container(
@@ -90,7 +98,7 @@ class DailyProfitsPage extends StatelessWidget {
                     BoxShadow(
                       color: Colors.grey.withOpacity(0.2),
                       blurRadius: 10,
-                      offset: Offset(0, 4),
+                      offset: const Offset(0, 4),
                     ),
                   ],
                 ),
@@ -138,7 +146,8 @@ class DailyProfitsPage extends StatelessWidget {
                             final day = value.toInt() + 1;
                             return Text(
                               '$day',
-                              style: TextStyle(fontSize: 12, color: Colors.grey[700]),
+                              style: TextStyle(
+                                  fontSize: 12, color: Colors.grey[700]),
                             );
                           },
                         ),
@@ -151,13 +160,16 @@ class DailyProfitsPage extends StatelessWidget {
                           getTitlesWidget: (value, _) {
                             return Text(
                               '\$${value.toInt()}',
-                              style: TextStyle(fontSize: 12, color: Colors.grey[700]),
+                              style: TextStyle(
+                                  fontSize: 12, color: Colors.grey[700]),
                             );
                           },
                         ),
                       ),
-                      rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                      topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                      rightTitles:
+                          AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                      topTitles:
+                          AxisTitles(sideTitles: SideTitles(showTitles: false)),
                     ),
                     borderData: FlBorderData(
                       show: true,

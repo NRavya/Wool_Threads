@@ -7,6 +7,8 @@ void main() {
 }
 
 class LoginApp extends StatelessWidget {
+  const LoginApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -16,7 +18,8 @@ class LoginApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(Color(0xFF0077B6)),
+            backgroundColor:
+                WidgetStateProperty.all<Color>(const Color(0xFF0077B6)),
           ),
         ),
       ),
