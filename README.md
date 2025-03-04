@@ -1,16 +1,23 @@
-# warm_threads
+# Wool_Threads
 
-A app and web based solution for tracking and monitoring wool from farm and fabric with help of chatbot in addition to it
 
-## Getting Started
+## Prerequisite
+- java 17 
+- maven 3.8.5+
 
-This project is a starting point for a Flutter application.
+## To run
+To run the project using docker, enter following command
 
-A few resources to get you started if this is your first Flutter project:
+```text
+docker compose up --build -d
+```
+(OR)    
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+To run backend in IDE itself, use below two command
+```text
+docker compose up mongodb  -d
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```text
+mvn spring-boot:run
+```
