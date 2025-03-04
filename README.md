@@ -1,6 +1,6 @@
 # warm_threads
 
-A new Flutter project.
+A app and web based solution for tracking and monitoring wool from farm and fabric with help of chatbot in addition to it
 
 ## Getting Started
 
